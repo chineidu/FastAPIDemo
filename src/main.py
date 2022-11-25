@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-
 app = FastAPI()
 
 
@@ -30,8 +29,7 @@ def root():
 
 @app.post("/signup")
 def signup(input_: InputSchema):
-    return input_ # OR  return {"message": input_.track, "mentor": input_.mentor, "cost": input_.cost}
-   
+    return input_  # OR return {"message": input_.track, "mentor": input_.mentor, "cost": input_.cost}
 
 
 if __name__ == "__main__":
