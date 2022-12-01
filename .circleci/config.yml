@@ -16,11 +16,12 @@ jobs:
       - checkout
       - run: python tests/test_get_endpoints.py # The code that runs your app. e.g
 
+# Orchestrate our job run sequence
 workflows:
   build_and_test:
     jobs:
       - build
       - test:
-        requires:
-          - build
+          requires:
+            - build
           
