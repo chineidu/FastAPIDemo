@@ -2,28 +2,31 @@ version: 2.1
 orbs:
   python: circleci/python@2.0.3
 
+prepare_venv: &prepare_venv
+  run:
+    name: Create venv
+    command: |
+      python3 -m venv venv
+      source venv/bin/activate
+      python3 -m pip install --upgrade pip
+      
+prepare_tox: &prepare_tox
+  run:
+    name: Install tox
+    command: |
+      python3 -m pip install --user tox
 jobs:
-  build_and_test: # this can be any name you choose
+  build_and_test:
     executor: python/default
     steps:
       - checkout
-      - python/install-packages:
-          pkg-manager: pip
-      - run:
-          name: Run tests
-          command: python -m pytest
-      - persist_to_workspace:
-          root: ~/project
-          paths:
-            - .
-
+      - *prepare_venv
+      - *prepare_tox
+      -  run:
+            name: Runnning app tests
+            command: |
+              tox
 workflows:
   test_my_app:
     jobs:
       - build_and_test
-      - deploy:
-          requires:
-            - build_and_test # only deploy if the build_and_test job has completed
-          filters:
-            branches:
-              only: main # only deploy when on main
